@@ -82,4 +82,22 @@ class CustomerServiceImplTest {
     assertNotNull(newCustomer);
     assertEquals("First", newCustomer.getFirstName());
   }
+
+  @Test
+  void saveCustomerById() {
+
+    Customer customer = new Customer();
+    customer.setId(1L);
+    customer.setFirstName("John");
+
+    when(customerRepository.save(any())).thenReturn(customer);
+
+    CustomerDTO toSave = CustomerMapper.INSTANCE.customerToCustomerDTO(customer);
+
+    CustomerDTO saved = customerService.saveCustomerById(1L, toSave);
+
+    assertNotNull(saved);
+    assertEquals("John", saved.getFirstName());
+    assertEquals("/api/v1/customers/1", saved.getCustomerUrl());
+  }
 }
