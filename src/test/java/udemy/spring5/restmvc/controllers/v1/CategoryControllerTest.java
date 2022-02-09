@@ -11,12 +11,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import udemy.spring5.restmvc.api.v1.model.CategoryDTO;
 import udemy.spring5.restmvc.services.CategoryService;
+import udemy.spring5.restmvc.services.ResourceNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -34,7 +36,10 @@ class CategoryControllerTest {
 
   @BeforeEach
   void setUp() {
-    mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
+    mockMvc = MockMvcBuilders
+        .standaloneSetup(categoryController)
+        .setControllerAdvice(new RestResponseEntityExceptionHandler())
+        .build();
   }
 
   @Test
@@ -75,4 +80,13 @@ class CategoryControllerTest {
         .andExpect(jsonPath("$.name", equalTo("Jim")));
   }
 
+  @Test
+  void testGetByNameNotFound() throws Exception {
+
+    when(categoryService.getCategoryByName(anyString())).thenThrow(new ResourceNotFoundException());
+
+    mockMvc.perform(get("/api/v1/categories/Jim")
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+  }
 }
