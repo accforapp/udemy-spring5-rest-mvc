@@ -1,8 +1,8 @@
 package udemy.spring5.restmvc.controllers.v1;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import udemy.spring5.restmvc.api.v1.model.VendorDTO;
 import udemy.spring5.restmvc.api.v1.model.VendorListDTO;
 import udemy.spring5.restmvc.services.VendorService;
 
@@ -20,5 +20,24 @@ public class VendorController {
   public VendorListDTO getVendors() {
 
     return new VendorListDTO(vendorService.getAllVendors());
+  }
+
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public VendorDTO saveNewVendor(@RequestBody VendorDTO vendorDTO) {
+
+    return vendorService.saveNewVendor(vendorDTO);
+  }
+
+  @DeleteMapping("/{id}")
+  public void deleteVendor(@PathVariable Long id) {
+
+    vendorService.deleteVendor(id);
+  }
+
+  @GetMapping("/{id}")
+  public VendorDTO getVendor(@PathVariable Long id) {
+
+    return vendorService.getVendor(id);
   }
 }

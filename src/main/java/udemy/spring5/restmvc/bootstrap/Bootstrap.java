@@ -5,8 +5,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import udemy.spring5.restmvc.domain.Category;
 import udemy.spring5.restmvc.domain.Customer;
+import udemy.spring5.restmvc.domain.Vendor;
 import udemy.spring5.restmvc.repositories.CategoryRepository;
 import udemy.spring5.restmvc.repositories.CustomerRepository;
+import udemy.spring5.restmvc.repositories.VendorRepository;
 
 @Slf4j
 @Component
@@ -14,10 +16,15 @@ public class Bootstrap implements CommandLineRunner {
 
   private final CategoryRepository categoryRepository;
   private final CustomerRepository customerRepository;
+  private final VendorRepository vendorRepository;
 
-  public Bootstrap(CategoryRepository categoryRepository, CustomerRepository customerRepository) {
+  public Bootstrap(CategoryRepository categoryRepository,
+                   CustomerRepository customerRepository,
+                   VendorRepository vendorRepository) {
+
     this.categoryRepository = categoryRepository;
     this.customerRepository = customerRepository;
+    this.vendorRepository = vendorRepository;
   }
 
   @Override
@@ -26,6 +33,8 @@ public class Bootstrap implements CommandLineRunner {
     loadCustomers();
 
     loadCategories();
+
+    loadVendors();
   }
 
   private void loadCategories() {
@@ -69,5 +78,25 @@ public class Bootstrap implements CommandLineRunner {
 
     log.info("Customers loaded = " + customerRepository.count());
 
+  }
+
+  private void loadVendors() {
+
+    Vendor vendor1 = new Vendor();
+    vendor1.setName("First vendor ltd.");
+
+    vendorRepository.save(vendor1);
+
+    Vendor vendor2 = new Vendor();
+    vendor2.setName("Second vendor org.");
+
+    vendorRepository.save(vendor2);
+
+    Vendor vendor3 = new Vendor();
+    vendor3.setName("Third vendor corp.");
+
+    vendorRepository.save(vendor3);
+
+    log.info("Vendors loaded = " + vendorRepository.count());
   }
 }

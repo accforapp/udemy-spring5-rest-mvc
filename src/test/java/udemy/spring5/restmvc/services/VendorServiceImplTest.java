@@ -11,8 +11,11 @@ import udemy.spring5.restmvc.repositories.VendorRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,5 +47,46 @@ class VendorServiceImplTest {
     List<VendorDTO> allVendors = vendorService.getAllVendors();
 
     assertEquals(2, allVendors.size());
+  }
+
+  @Test
+  void saveNewVendor() {
+
+    Vendor vendor = new Vendor();
+    vendor.setId(1L);
+    vendor.setName("Test Vendor");
+
+    when(vendorRepository.save(any(Vendor.class))).thenReturn(vendor);
+
+    VendorDTO newVendorDTO = new VendorDTO();
+    newVendorDTO.setName("Test Vendor");
+
+    VendorDTO vendorDTO = vendorService.saveNewVendor(newVendorDTO);
+
+    assertEquals("Test Vendor", vendorDTO.getName());
+    assertEquals("/api/v1/vendors/1", vendorDTO.getVendorUrl());
+  }
+
+  @Test
+  void deleteVendor() {
+
+    vendorService.deleteVendor(1L);
+
+    verify(vendorRepository).deleteById(1L);
+  }
+
+  @Test
+  void getVendor() {
+
+    Vendor vendor = new Vendor();
+    vendor.setId(1L);
+    vendor.setName("Test Vendor");
+
+    when(vendorRepository.findById(1L)).thenReturn(Optional.of(vendor));
+
+    VendorDTO vendorDTO = vendorService.getVendor(1L);
+
+    assertEquals("Test Vendor", vendorDTO.getName());
+    assertEquals("/api/v1/vendors/1", vendorDTO.getVendorUrl());
   }
 }
