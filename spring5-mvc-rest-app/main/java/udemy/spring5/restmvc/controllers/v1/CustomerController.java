@@ -1,5 +1,7 @@
 package udemy.spring5.restmvc.controllers.v1;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -8,6 +10,7 @@ import udemy.spring5.restmvc.api.v1.model.CustomerDTO;
 import udemy.spring5.restmvc.api.v1.model.CustomerListDTO;
 import udemy.spring5.restmvc.services.CustomerService;
 
+@Api(description = "Customer controller")
 @Controller
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
@@ -18,6 +21,7 @@ public class CustomerController {
     this.customerService = customerService;
   }
 
+  @ApiOperation("Getting list of customers")
   @GetMapping
   public ResponseEntity<CustomerListDTO> getAllCustomers() {
 

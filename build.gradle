@@ -1,38 +1,33 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.2'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
 }
 
-group = 'udemy.spring5'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+subprojects {
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
+	group = 'udemy.spring5'
+	version = '0.0.1-SNAPSHOT'
+//	sourceCompatibility = '11'
+
+	apply plugin : 'java'
+	apply plugin : 'io.spring.dependency-management'
+//	apply plugin : 'org.springframework.boot'
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+//
+//	dependencies {
+//		developmentOnly 'org.springframework.boot:spring-boot-devtools'
+//	}
+
+	repositories {
+		mavenCentral()
+	}
+
+	tasks.named('test') {
+		useJUnitPlatform()
 	}
 }
 
-repositories {
-	mavenCentral()
-}
-
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation "io.springfox:springfox-boot-starter:3.0.0"
-    compileOnly 'org.projectlombok:lombok'
-	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.h2database:h2'
-	annotationProcessor 'org.projectlombok:lombok'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-}
-
-tasks.named('test') {
-	useJUnitPlatform()
-}

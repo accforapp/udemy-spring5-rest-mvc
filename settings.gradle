@@ -1,1 +1,3 @@
 rootProject.name = 'restmvc'
+include 'rest-model'
+include 'spring5-mvc-rest-app'
